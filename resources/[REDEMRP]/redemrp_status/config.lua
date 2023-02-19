@@ -16,7 +16,7 @@ Config.Items = {
         hunger = 0,
         thirst = 15,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             Drink()
@@ -27,7 +27,7 @@ Config.Items = {
         hunger = 7,
         thirst = 0,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             Eat()
@@ -38,7 +38,7 @@ Config.Items = {
         hunger = 0,
         thirst = 0,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             Cigar()
@@ -49,7 +49,7 @@ Config.Items = {
         hunger = 0,
         thirst = 0,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             Cigarette()
@@ -60,7 +60,7 @@ Config.Items = {
         hunger = 0,
         thirst = 0,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             Bandage()
@@ -70,7 +70,7 @@ Config.Items = {
         hunger = 0,
         thirst = 0,
         action = function(source, name)
-            TriggerClientEvent('redemrp_status:Action-' .. name, source)
+            TriggerClientEvent('bw_status:Action-' .. name, source)
         end,
         ClientAction = function()
             MBandage()

@@ -75,7 +75,7 @@ end)
 RegisterCommand("feedme", function(source, args, rawCommand)
     local Player = RedEM.GetPlayer(source)
     if Player.group == "admin" or Player.group == "superadmin" then
-        TriggerEvent("redemrp_status:server:FeedMe", source)
+        TriggerEvent("bw_status:server:FeedMe", source)
         RedEM.Functions.NotifyRight(source, "Fed and watered.", 3000)
     else
         RedEM.Functions.NotifyRight(source, "Insufficient permissions.", 3000)

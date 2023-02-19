@@ -5,22 +5,38 @@ local PlayersStatus = {}
 AddEventHandler("redemrp:playerLoaded", function(source, Player)
     local _source = source
     local metadata = Player.GetMetaData()
-    TriggerClientEvent('redemrp_status:UpdateStatus', tonumber(_source), metadata.thirst, metadata.hunger, metadata.stress)
+    TriggerClientEvent('bw_status:UpdateStatus', tonumber(_source), metadata.thirst, metadata.hunger, metadata.stress)
 end)
 
-RegisterNetEvent("redemrp_status:server:FeedMe", function(source)
+RegisterNetEvent("bw_status:server:FeedMe", function(source)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
     Player.SetMetaData("hunger", 100)
     Player.SetMetaData("thirst", 100)
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, 100, 100, Player.GetMetaData().stress)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, 100, 100, Player.GetMetaData().stress)
 end)
 
-RegisterNetEvent("redemrp_status:server:ClearStress", function(source)
+RegisterNetEvent("bw_status:server:ClearStress", function(source)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
     Player.SetMetaData("stress", 0)
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, 0)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, 0)
+end)
+
+RegisterServerEvent("bw_status:server:RemoveThirst", function(value)
+    local _source = source
+    local Player = RedEM.GetPlayer(_source)
+    local new_value = Player.GetMetaData().thirst - value
+    Player.SetMetaData("thirst", new_value)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, 0)
+end)
+
+RegisterServerEvent("bw_status:server:RemoveHunger", function(value)
+    local _source = source
+    local Player = RedEM.GetPlayer(_source)
+    local new_value = Player.GetMetaData().hunger - value
+    Player.SetMetaData("hunger", new_value)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, 0)
 end)
 
 function UpdatePlayersStatus()
@@ -45,7 +61,7 @@ function UpdatePlayersStatus()
                             tempPlayer.SetMetaData("stress", tonumber(string.format("%.2f", tonumber(metadata.stress) - 0.1)))
                         end
                     end
-                    TriggerClientEvent('redemrp_status:UpdateStatus', tonumber(playerId), tempPlayer.GetMetaData().thirst, tempPlayer.GetMetaData().hunger, tempPlayer.GetMetaData().stress)
+                    TriggerClientEvent('bw_status:UpdateStatus', tonumber(playerId), tempPlayer.GetMetaData().thirst, tempPlayer.GetMetaData().hunger, tempPlayer.GetMetaData().stress)
                     Wait(10)
                 end
             end
@@ -55,7 +71,7 @@ function UpdatePlayersStatus()
 end
 UpdatePlayersStatus()
 
-RegisterServerEvent("redemrp_status:server:AddHungerThirst", function(hunger, thirst)
+RegisterServerEvent("bw_status:server:AddHungerThirst", function(hunger, thirst)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
     local meta = Player.GetMetaData()
@@ -69,10 +85,10 @@ RegisterServerEvent("redemrp_status:server:AddHungerThirst", function(hunger, th
         Player.SetMetaData("thirst", 100)
     end
 
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
 end)
 
-RegisterServerEvent("redemrp_status:server:AddStress", function(amount)
+RegisterServerEvent("bw_status:server:AddStress", function(amount)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
     local meta = Player.GetMetaData()
@@ -82,10 +98,10 @@ RegisterServerEvent("redemrp_status:server:AddStress", function(amount)
         Player.SetMetaData("stress", 100)
     end
 
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
 end)
 
-RegisterServerEvent("redemrp_status:server:RelieveStress", function(amount)
+RegisterServerEvent("bw_status:server:RelieveStress", function(amount)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
     local meta = Player.GetMetaData()
@@ -97,10 +113,10 @@ RegisterServerEvent("redemrp_status:server:RelieveStress", function(amount)
         newstress = 0
     end
 
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, newstress)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, newstress)
 end)
 
-RegisterServerEvent("redemrp_status:server:AddHungerThirstForId", function(_source, hunger, thirst)
+RegisterServerEvent("bw_status:server:AddHungerThirstForId", function(_source, hunger, thirst)
     local Player = RedEM.GetPlayer(_source)
     local meta = Player.GetMetaData()
 
@@ -113,5 +129,24 @@ RegisterServerEvent("redemrp_status:server:AddHungerThirstForId", function(_sour
         Player.SetMetaData("thirst", 100)
     end
 
-    TriggerClientEvent('redemrp_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, Player.GetMetaData().stress)
 end)
+
+RegisterCommand('setstress', function(source, args, raw)
+    local _source = source
+    local Player = RedEM.GetPlayer(_source)
+    TriggerClientEvent('bw_status:UpdateStatus', _source, Player.GetMetaData().thirst, Player.GetMetaData().hunger, tonumber(args[1]))
+end)
+
+function dump(o)
+    if type(o) == 'table' then
+       local s = '{ '
+       for k,v in pairs(o) do
+          if type(k) ~= 'number' then k = '"'..k..'"' end
+          s = s .. '['..k..'] = ' .. dump(v) .. ','
+       end
+       return s .. '} '
+    else
+       return tostring(o)
+    end
+ end

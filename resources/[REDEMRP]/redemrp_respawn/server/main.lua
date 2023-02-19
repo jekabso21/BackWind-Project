@@ -29,10 +29,17 @@ end)
 RegisterServerEvent("redemrp_respawn:server:RequestRevive", function(id)
     local _source = source
     local Player = RedEM.GetPlayer(_source)
+    print("reviving")
     if (Player.GetGroup() == "superadmin" or Player.GetGroup() == "admin" or Player.GetGroup() == "mod") then
         if id ~= 0 and id ~= nil then
+            local ply = RedEM.GetPlayer(id)
             TriggerClientEvent('redemrp_respawn:client:Revived', id)
+            ply.SetMetaData("hunger", 100)
+            ply.SetMetaData("thirst", 100)
+            print("Player ID: [" .. _source .. "] - Revived Player ID: [" .. id .. "]")
         else
+            Player.SetMetaData("hunger", 100)
+            Player.SetMetaData("thirst", 100)
             TriggerClientEvent('redemrp_respawn:client:Revived', _source )
         end
     else
@@ -97,3 +104,15 @@ RegisterServerEvent("redemrp_respawn:DeadTable", function(type)
         end
     end
 end)
+function dump(o)
+    if type(o) == 'table' then
+        local s = '{ '
+        for k,v in pairs(o) do
+            if type(k) ~= 'number' then k = '"'..k..'"' end
+            s = s .. '['..k..'] = ' .. dump(v) .. ','
+        end
+        return s .. '} '
+    else
+        return tostring(o)
+    end
+end
