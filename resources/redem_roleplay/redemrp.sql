@@ -1,3 +1,8 @@
+
+CREATE DATABASE IF NOT EXISTS `BackWind-Dev` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin */;
+
+USE `BackWind-Dev`;
+
 CREATE TABLE `characters` (
   `id` int(11) NOT NULL,
   `identifier` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
