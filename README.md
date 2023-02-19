@@ -1,8 +1,8 @@
 # Welcome to BackWind RedM Server Project!
 I'm excited to share my first public RedM server repository on GitHub with the community! I have just started creating this repository, and it will take some time to build a fully functional server. But I hope that this repository will provide a valuable resource for those who are interested in Red Dead Redemption 2 roleplaying.
 
-Features
-## This repository will eventually include a variety of features, such as:
+## Features
+### This repository will eventually include a variety of features, such as:
 
 - Custom player models and clothing items
 - Dynamic weather and time-of-day systems
