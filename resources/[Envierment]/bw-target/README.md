@@ -7,8 +7,8 @@ You can also post any missing features from other targetting resources that you 
 ## Referencing:
 
 Add the api to your resource fxmanifest.lua:
-`client_script '@meta_target/lib/target.lua'`  
-NOTE: You can use exports by the same function name if you choose (as the examples.lua file does).
+`client_script '@bw-target/lib/target.lua'`  [
+NOTE: You can use e]()xports by the same function name if you choose (as the examples.lua file does).
 
 ## Api functions:
 ```
