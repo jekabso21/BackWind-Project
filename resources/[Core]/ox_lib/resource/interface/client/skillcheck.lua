@@ -4,19 +4,15 @@ local skillcheck
 ---@alias SkillCheckDifficulity 'easy' | 'medium' | 'hard' | { areaSize: number, speedMultiplier: number }
 
 ---@param difficulty SkillCheckDifficulity | SkillCheckDifficulity[]
----@param inputs string[]
 ---@return boolean?
-function lib.skillCheck(difficulty, inputs)
+function lib.skillCheck(difficulty)
     if skillcheck then return end
     skillcheck = promise:new()
 
     SetNuiFocus(true, false)
     SendNUIMessage({
         action = 'startSkillCheck',
-        data = {
-            difficulty = difficulty,
-            inputs = inputs
-        }
+        data = difficulty
     })
 
     return Citizen.Await(skillcheck)

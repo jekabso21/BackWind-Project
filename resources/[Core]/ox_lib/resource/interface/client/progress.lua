@@ -61,16 +61,19 @@ local controls = {
 local function startProgress(data)
     playerState.invBusy = true
     progress = data
-    local anim = data.anim
 
-    if anim then
-        if anim.dict then
-            lib.requestAnimDict(anim.dict)
+    if data.anim then
+        if data.anim.dict then
+            lib.requestAnimDict(data.anim.dict)
 
-            TaskPlayAnim(cache.ped, anim.dict, anim.clip, anim.blendIn or 3.0, anim.blendOut or 1.0, anim.duration or -1, anim.flag or 49, anim.playbackRate or 0, anim.lockX, anim.lockY, anim.lockZ)
-            RemoveAnimDict(anim.dict)
-        elseif anim.scenario then
-            TaskStartScenarioInPlace(cache.ped, anim.scenario, 0, anim.playEnter ~= nil and anim.playEnter or true)
+            TaskPlayAnim(cache.ped, data.anim.dict, data.anim.clip, data.anim.blendIn or 3.0, data.anim.blendOut or 1.0, data.anim.duration or -1, data.anim.flag or 49, data.anim.playbackRate or 0, data.anim.lockX, data.anim.lockY, data.anim.lockZ)
+            RemoveAnimDict(data.anim.dict)
+
+            data.anim = true
+        elseif data.anim.scenario then
+            TaskStartScenarioInPlace(cache.ped, data.anim.scenario, 0, data.anim.playEnter ~= nil and data.anim.playEnter or true)
+
+            data.anim = true
         end
     end
 
@@ -126,6 +129,10 @@ local function startProgress(data)
         Wait(0)
     end
 
+    if data.anim then
+        ClearPedTasks(cache.ped)
+    end
+
     if data.prop then
         local n = #data.prop
         for i = 1, n > 0 and n or 1 do
@@ -134,15 +141,6 @@ local function startProgress(data)
             if prop then
                 DeleteEntity(prop)
             end
-        end
-    end
-
-    if anim then
-        if anim.dict then
-            StopAnimTask(cache.ped, anim.dict, anim.clip, 1.0)
-            Wait(0) -- This is needed here otherwise the StopAnimTask is cancelled
-        else
-            ClearPedTasks(cache.ped)
         end
     end
 
@@ -198,6 +196,8 @@ end
 function lib.cancelProgress()
     if not progress then
         error('No progress bar is active')
+    elseif not progress.canCancel then
+        error('Progress bar cannot be cancelled')
     end
 
     progress = false

@@ -31,8 +31,7 @@ function lib.loadLocale()
                 local locale = locales[var:sub(3, -2)]
 
                 if locale then
-                    locale = locale:gsub('%%', '%%%%')
-                    v = v:gsub(var, locale)
+                    v = v:gsub(var, locale:gsub('%%', '%%%%'))
                 end
             end
         end

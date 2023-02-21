@@ -1,4 +1,4 @@
 /.idea
 /cache
-/node_modules
 server.cfg
+*.txt

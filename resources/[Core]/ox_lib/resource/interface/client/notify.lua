@@ -1,4 +1,4 @@
----@alias NotificationPosition 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left' | 'center-right' | 'center-left'
+---@alias NotificationPosition 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left'
 ---@alias NotificationType 'inform' | 'error' | 'success'
 
 ---@class NotifyProps
@@ -15,7 +15,7 @@
 ---@param data NotifyProps
 function lib.notify(data)
     SendNUIMessage({
-        action = 'notify',
+        action = 'customNotify',
         data = data
     })
 end
@@ -30,10 +30,10 @@ end
 
 ---@param data DefaultNotifyProps
 function lib.defaultNotify(data)
-    -- Backwards compat for v3 
-    data.type = data.status
-    if data.type == 'info' or data.type == 'warning' then data.type = 'inform' end
-    return lib.notify(data)
+    SendNUIMessage({
+        action = 'notify',
+        data = data
+    })
 end
 
 RegisterNetEvent('ox_lib:notify', lib.notify)

@@ -1,4 +1,4 @@
-local apiRef = exports.meta_target:getExportNames()
+local apiRef = 'bw-target'
 
 target = {}
 

@@ -1,7 +1,7 @@
 local input
 
 ---@class InputDialogRowProps
----@field type 'input' | 'number' | 'checkbox' | 'select' | 'slider' | 'multi-select' | 'date' | 'date-range' | 'time' | 'textarea'
+---@field type 'input' | 'number' | 'checkbox' | 'select' | 'slider'
 ---@field label string
 ---@field options? { value: string, label: string, default?: string }[]
 ---@field password? boolean
@@ -14,20 +14,12 @@ local input
 ---@field min? number
 ---@field max? number
 ---@field step? number
----@field autosize? boolean
----@field required? boolean
----@field format? string
----@field clearable? string
 ---@field description? string
-
----@class InputDialogOptionsProps
----@field allowCancel? boolean
 
 ---@param heading string
 ---@param rows string[] | InputDialogRowProps[]
----@param options InputDialogOptionsProps[]
 ---@return string[] | number[] | boolean[] | nil
-function lib.inputDialog(heading, rows, options)
+function lib.inputDialog(heading, rows)
     if input then return end
     input = promise.new()
 
@@ -43,8 +35,7 @@ function lib.inputDialog(heading, rows, options)
         action = 'openDialog',
         data = {
             heading = heading,
-            rows = rows,
-            options = options
+            rows = rows
         }
     })
 

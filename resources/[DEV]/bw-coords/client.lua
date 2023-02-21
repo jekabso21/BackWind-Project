@@ -1,0 +1,6 @@
+RegisterCommand('savepos', function(source, args, rawCommand)
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
+    TriggerServerEvent('bw-coords:server:savePos', coords, heading)
+end)
