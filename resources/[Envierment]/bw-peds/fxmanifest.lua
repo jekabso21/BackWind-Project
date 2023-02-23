@@ -7,7 +7,6 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 version '2.6.1'
 
 client_scripts {
-  '@bw-target/lib/target.lua',
   'config.lua',
   'client.lua',
 }

@@ -14,9 +14,15 @@ I'm excited to share my first public RedM server repository on GitHub with the c
 
 ### Please note that not all of these features are available yet.
 
+## Note
 
-## Trello board to see ToDo list for the project
+if you want to use kd_mouseselection you need to buy from [here](https://store.kaddarem.com/package/5257125)
+
+----
+
+### Trello board to see ToDo list for the project
 [Trello Board](https://trello.com/invite/b/0qfFTBcW/ATTI926025dff8b22abe2a6e691928ca0a9e44160957/todo-list)
 
-## Discord Support Server
+
+### Discord Support Server
 [Discord Server](https://discord.gg/JF3KXK4sg4)

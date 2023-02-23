@@ -1,4 +1,6 @@
 local pedstable = {}
+local CMenu = {}
+local target = 0
 
 Citizen.CreateThread(function()
     while true do
@@ -44,9 +46,56 @@ Citizen.CreateThread(function()
     end
 end)
 
+local CMenu = {}
+
+TriggerEvent('CMenu:Get', function (_menu)
+    CMenu = _menu
+end)
+
+AddEventHandler('mouse-selection:CanInteract', function(entity, callback)
+    local _model = GetEntityModel(entity)
+    for _, ped in pairs(Config.models.Peds) do
+        for i, v in pairs(pedstable) do
+            if ped.name == v.name then
+                target = entity
+                if v.ped == entity then
+                    callback(true)
+                    return
+                end
+            end
+        end
+    end
+end)
+
+AddEventHandler("mouse-selection:ClickEntity", function(_entityHover)
+    for _, ped in pairs(Config.models.Peds) do
+        for i, v in pairs(pedstable) do
+            if v.ped == target then
+                if ped.name == v.name then
+                    for _, target in ipairs(ped.targets) do
+                        print(target.label, target.event)
+                        CMenu.AddItem({
+                            title= target.label,
+                            id=ped.name,
+                            callback=target.event
+                        })
+                    end
+                end
+            end
+        end
+    end
+end)
+
 RegisterNetEvent('bw-peds:client:target')
 AddEventHandler('bw-peds:client:target', function()
+    TriggerEvent('bw-peds:client:targetreset')
     print("Hello from target")
+end)
+
+RegisterNetEvent('bw-peds:client:targetreset')
+AddEventHandler('bw-peds:client:targetreset', function()
+    target = 0
+    print("Hello from targetreset")
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
