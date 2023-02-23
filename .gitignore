@@ -2,4 +2,5 @@
 /cache
 server.cfg
 *.txt
-resources/[Envierment]/chat-redm/dist
+imgui.ini
+resources/[Core]/chat-redm/dist

@@ -1,3 +1,6 @@
+RedEM = exports["redem_roleplay"]:RedEM()
+
+
 local currentWeather = Config.weather
 local currentTime = Config.time
 local currentTimescale = Config.timescale
@@ -300,55 +303,82 @@ AddEventHandler("weathersync:init", function()
 end)
 
 RegisterCommand("weather", function(source, args, raw)
+	local Player = RedEM.GetPlayer(source)
 	local weather = args[1] and args[1] or currentWeather
 	local transition = tonumber(args[2]) or 10.0
 	local freeze = args[3] == "1"
 	local permanentSnow = args[4] == "1"
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if transition <= 0.0 then
+			transition = 0.1
+		end
 
-	if transition <= 0.0 then
-		transition = 0.1
-	end
-
-	if contains(Config.weatherTypes, weather) then
-		setWeather(weather, transition + 0.0, freeze, permanentSnow)
+		if contains(Config.weatherTypes, weather) then
+			setWeather(weather, transition + 0.0, freeze, permanentSnow)
+		else
+			printMessage(source, {color = {255, 0, 0}, args = {"Error", "Unknown weather type: " .. weather}})
+		end
 	else
-		printMessage(source, {color = {255, 0, 0}, args = {"Error", "Unknown weather type: " .. weather}})
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
 	end
 end, true)
 
 RegisterCommand("time", function(source, args, raw)
-	if #args > 0 then
-		local d = tonumber(args[1]) or 0
-		local h = tonumber(args[2]) or 0
-		local m = tonumber(args[3]) or 0
-		local s = tonumber(args[4]) or 0
-		local t = tonumber(args[5]) or 0
-		local f = args[6] == "1"
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if #args > 0 then
+			local d = tonumber(args[1]) or 0
+			local h = tonumber(args[2]) or 0
+			local m = tonumber(args[3]) or 0
+			local s = tonumber(args[4]) or 0
+			local t = tonumber(args[5]) or 0
+			local f = args[6] == "1"
 
-		setTime(d, h, m, s, t, f)
+			setTime(d, h, m, s, t, f)
+		else
+			local d, h, m, s = TimeToDHMS(currentTime)
+			printMessage(source, {color = {255, 255, 128}, args = {"Time", string.format("%s %.2d:%.2d:%.2d", GetDayOfWeek(d), h, m, s)}})
+		end
 	else
-		local d, h, m, s = TimeToDHMS(currentTime)
-		printMessage(source, {color = {255, 255, 128}, args = {"Time", string.format("%s %.2d:%.2d:%.2d", GetDayOfWeek(d), h, m, s)}})
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
 	end
 end, true)
 
+
 RegisterCommand("timescale", function(source, args, raw)
-	if args[1] then
-		setTimescale(tonumber(args[1]) + 0.0)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if args[1] then
+			setTimescale(tonumber(args[1]) + 0.0)
+		end
 	else
-		printMessage(source, {color = {255, 255, 128}, args = {"Timescale", currentTimescale}})
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
 	end
 end, true)
 
 RegisterCommand("syncdelay", function(source, args, raw)
-	if args[1] then
-		setSyncDelay(tonumber(args[1]))
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if args[1] then
+			setSyncDelay(tonumber(args[1]))
+		end
 	else
-		printMessage(source, {color = {255, 255, 128}, args = {"Sync delay", SyncDelay}})
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
 	end
 end, true)
 
 RegisterCommand("wind", function(source, args, raw)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if #args > 0 then
+			local direction = tonumber(args[1]) + 0.0 or 0.0
+			local speed = tonumber(args[2]) + 1.0 or 0.0
+			local frozen = args[3] == "1"
+			setWind(direction, speed, frozen)
+		end
+	else
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
+	end
 	if #args > 0 then
 		local direction = tonumber(args[1]) + 0.0 or 0.0
 		local speed = tonumber(args[2]) + 1.0 or 0.0
@@ -358,41 +388,62 @@ RegisterCommand("wind", function(source, args, raw)
 end, true)
 
 RegisterCommand("forecast", function(source, args, raw)
-	if source and source > 0 then
-		TriggerClientEvent("weathersync:toggleForecast", source)
-	else
-		local forecast = createForecast()
-		printMessage(source, {args = {"WEATHER FORECAST"}})
-		printMessage(source, {args = {"================"}})
-		for i = 1, #forecast do
-			local time = string.format("%s %.2d:%.2d", GetDayOfWeek(forecast[i].day), forecast[i].hour, forecast[i].minute)
-			printMessage(source, {args = {time, forecast[i].weather}})
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		if source and source > 0 then
+			TriggerClientEvent("weathersync:toggleForecast", source)
+		else
+			local forecast = createForecast()
+			printMessage(source, {args = {"WEATHER FORECAST"}})
+			printMessage(source, {args = {"================"}})
+			for i = 1, #forecast do
+				local time = string.format("%s %.2d:%.2d", GetDayOfWeek(forecast[i].day), forecast[i].hour, forecast[i].minute)
+				printMessage(source, {args = {time, forecast[i].weather}})
+			end
+			printMessage(source, {args = {"================"}})
 		end
-		printMessage(source, {args = {"================"}})
+	else
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
 	end
 end, true)
 
 RegisterCommand("weatherui", function(source, args, raw)
-	TriggerClientEvent("weathersync:openAdminUi", source)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		TriggerClientEvent("weathersync:openAdminUi", source)
+	end
 end, true)
 
 RegisterCommand("weathersync", function(source, args, raw)
-	TriggerClientEvent("weathersync:toggleSync", source)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		TriggerClientEvent("weathersync:toggleSync", source)
+	end
 end, true)
 
 RegisterCommand("mytime", function(source, args, raw)
-	local h = (args[1] and tonumber(args[1]) or 0)
-	local m = (args[2] and tonumber(args[2]) or 0)
-	local s = (args[3] and tonumber(args[3]) or 0)
-	local t = (args[4] and tonumber(args[4]) or 0)
-	TriggerClientEvent("weathersync:setMyTime", source, h, m, s, t)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		local h = (args[1] and tonumber(args[1]) or 0)
+		local m = (args[2] and tonumber(args[2]) or 0)
+		local s = (args[3] and tonumber(args[3]) or 0)
+		local t = (args[4] and tonumber(args[4]) or 0)
+		TriggerClientEvent("weathersync:setMyTime", source, h, m, s, t)
+	else
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
+	end
 end, true)
 
 RegisterCommand("myweather", function(source, args, raw)
-	local weather = (args[1] and args[1] or currentWeather)
-	local transition = (args[2] and tonumber(args[2]) or 5.0)
-	local permanentSnow = args[3] == "1"
-	TriggerClientEvent("weathersync:setMyWeather", source, weather, transition, permanentSnow)
+	local Player = RedEM.GetPlayer(source)
+	if Player.group == "mod" or Player.group == "admin" or Player.group == "superadmin" then
+		local weather = (args[1] and args[1] or currentWeather)
+		local transition = (args[2] and tonumber(args[2]) or 5.0)
+		local permanentSnow = args[3] == "1"
+		TriggerClientEvent("weathersync:setMyWeather", source, weather, transition, permanentSnow)
+	else
+		printMessage(source, {color = {255, 0, 0}, args = {"Error", "You don't have permission to use this command"}})
+	end
 end, true)
 
 Citizen.CreateThread(function()
