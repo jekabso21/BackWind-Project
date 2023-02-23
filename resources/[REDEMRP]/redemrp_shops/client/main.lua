@@ -38,36 +38,51 @@ function OpenShop()
 end
 
 
-Citizen.CreateThread(function()
-    while true do
-        Wait(0)
-        local can_wait = true
-        local coords   = GetEntityCoords(PlayerPedId())
+--Citizen.CreateThread(function()
+--    while true do
+--        Wait(0)
+--        local can_wait = true
+--        local coords   = GetEntityCoords(PlayerPedId())
+--
+--        for k,v in pairs(Config.Zones) do
+--            for i = 1, #v.Pos, 1 do
+--                local distance = Vdist(coords, v.Pos[i].x, v.Pos[i].y, v.Pos[i].z)
+--                if distance <= 15.0 then
+--                    can_wait = false
+--                end
+--
+--                if distance < Config.EnableDistance and not MenuActive then
+--                    local ShopGroupName  = CreateVarString(10, 'LITERAL_STRING', "Shop")
+--                    PromptSetActiveGroupThisFrame(OpenShopGroup, ShopGroupName)
+--					 if PromptHasHoldModeCompleted(PromptShop) and not MenuActive then
+--                        MenuActive = true
+--                        spawnCoords = v.Spawn[i]
+--                        OpenShopMenu(k)
+--					end
+--                end
+--
+--            end
+--        end
+--
+--        if can_wait == true then
+--            Wait(1000)
+--        end
+--
+--    end
+--end)
 
-        for k,v in pairs(Config.Zones) do
-            for i = 1, #v.Pos, 1 do
-                local distance = Vdist(coords, v.Pos[i].x, v.Pos[i].y, v.Pos[i].z)
-                if distance <= 15.0 then
-                    can_wait = false
-                end
-
-                if distance < Config.EnableDistance and not MenuActive then
-                    local ShopGroupName  = CreateVarString(10, 'LITERAL_STRING', "Shop")
-                    PromptSetActiveGroupThisFrame(OpenShopGroup, ShopGroupName)
-					 if PromptHasHoldModeCompleted(PromptShop) and not MenuActive then
-                        MenuActive = true
-                        spawnCoords = v.Spawn[i]
-                        OpenShopMenu(k)
-					end
-                end
-
+RegisterNetEvent('redemrp_shops:OpenShop')
+AddEventHandler('redemrp_shops:OpenShop', function()
+    local coords   = GetEntityCoords(PlayerPedId())
+    for k,v in pairs(Config.Zones) do
+        for i = 1, #v.Pos, 1 do
+            local distance = Vdist(coords, v.Pos[i].x, v.Pos[i].y, v.Pos[i].z)
+            if distance < 10 and not MenuActive then
+                MenuActive = true
+                spawnCoords = v.Spawn[i]
+                OpenShopMenu(k)
             end
         end
-
-        if can_wait == true then
-            Wait(1000)
-        end
-
     end
 end)
 

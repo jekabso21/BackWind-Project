@@ -28,6 +28,19 @@ Citizen.CreateThread(function()
                         Citizen.InvokeNative(0x283978A15512B2FE, Ped, true)
                         SetEntityHeading(Ped, v.heading)
                         SetEntityAsMissionEntity(Ped, true, true)
+                        --set animation from config
+                        if v.anim ~= nil then
+                            if v.anim_dict ~= nil then
+                                RequestAnimDict(v.anim_dict)
+                                while not HasAnimDictLoaded(v.anim_dict) do
+                                    Citizen.Wait(0)
+                                end
+                                print(v.anim_dict, v.anim)
+                                TaskPlayAnim(Ped, v.anim_dict, v.anim, 8.0, -8.0, -1, 31, 0, true, 0, false, 0, false)
+                            else
+                                TaskStartScenarioInPlace(Ped, v.anim, 0, true)
+                            end
+                        end
                         table.insert(pedstable, {name = v.name, ped = Ped})
                         print(dump(pedstable))
                     end
