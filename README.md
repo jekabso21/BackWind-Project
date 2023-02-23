@@ -17,3 +17,6 @@ I'm excited to share my first public RedM server repository on GitHub with the c
 
 ## Trello board to see ToDo list for the project
 [Trello Board](https://trello.com/invite/b/0qfFTBcW/ATTI926025dff8b22abe2a6e691928ca0a9e44160957/todo-list)
+
+## Discord Support Server
+[Discord Server](https://discord.gg/JF3KXK4sg4)
