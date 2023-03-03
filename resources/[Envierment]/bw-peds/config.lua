@@ -20,5 +20,20 @@ Config.models = {
             }
         },
 
+        {
+            name = "stables_1",
+            coords = vector3(-365.6872253418, 790.73187255859, 116.17196655273),
+            heading = 175.245,
+            model = "u_m_m_htlrancherbounty_01",
+            anim_dict = "amb_misc@world_human_stand_waiting@female_a@idle_a",
+            anim = "idle_a",
+            targets = {
+                {
+                    event = "bw-stables:OpenMenu",
+                    label = "Open Stables"
+                }
+            }
+        },
+
     }
 }
