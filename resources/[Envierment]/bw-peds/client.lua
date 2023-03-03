@@ -87,16 +87,34 @@ AddEventHandler("mouse-selection:ClickEntity", function(_entityHover)
                 if ped.name == v.name then
                     for _, target in ipairs(ped.targets) do
                         print(target.label, target.event)
-                        CMenu.AddItem({
-                            title= target.label,
-                            id=ped.name,
-                            callback=target.event
-                        })
+                        print(target.arg)
+                        if target.arg == nil then
+                            CMenu.AddItem({
+                                title= target.label,
+                                id=ped.name,
+                                callback=target.event
+                            })
+                        else
+                            print("WTF")
+                            print(target.arg .. " WTF2")
+                            CMenu.AddItem({
+                                title= target.label,
+                                id=ped.name,
+                                callback=target.event,
+                                argument = target.arg
+                            })
+                        end
                     end
                 end
             end
         end
     end
+end)
+
+RegisterNetEvent('bw-peds:client:WTF')
+AddEventHandler('bw-peds:client:WTF', function(_entityHover, id, argument)
+    print(_entityHover, id, argument)
+    print("WTF WTF WTF WTF")
 end)
 
 RegisterNetEvent('bw-peds:client:target')
