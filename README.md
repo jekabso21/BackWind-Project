@@ -20,8 +20,8 @@ if you want to use kd_mouseselection you need to buy from [here](https://store.k
 
 ----
 
-### Trello board to see ToDo list for the project
-[Trello Board](https://trello.com/invite/b/0qfFTBcW/ATTI926025dff8b22abe2a6e691928ca0a9e44160957/todo-list)
+### Github Project Board to see ToDo list for the project
+[Github Board](https://github.com/users/jekabso21/projects/3/views/1)
 
 
 ### Discord Support Server
