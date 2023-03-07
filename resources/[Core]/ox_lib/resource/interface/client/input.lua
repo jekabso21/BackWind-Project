@@ -29,6 +29,9 @@ function lib.inputDialog(heading, rows)
             rows[i] = { type = 'input', label = rows[i] --[[@as string]] }
         end
     end
+    DisableAllControlActions(0)
+    DisableAllControlActions(1)
+    DisableAllControlActions(2)
 
     SetNuiFocus(true, true)
     SendNUIMessage({

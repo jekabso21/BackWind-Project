@@ -31,6 +31,10 @@ Config.models = {
                 {
                     event = "bw-stables:OpenMenu",
                     label = "Open Stables"
+                },
+                {
+                    event = "bw-stables:storeHorse",
+                    label = "Store The Horse"
                 }
             }
         },
