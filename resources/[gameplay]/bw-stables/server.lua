@@ -18,6 +18,11 @@ AddEventHandler('bw-stables:storeHorse', function(model, id, location)
         end
     end)
 end)
+RegisterServerEvent("bw-stables:updateid")
+AddEventHandler("bw-stables:updateid", function(oldid, newid)
+    print(oldid, newid)
+    exports.oxmysql:execute('UPDATE horses SET last_id = ? WHERE last_id = ?', {newid, oldid})
+end)
 
 
 -- Server Callbacks --
@@ -25,8 +30,8 @@ RedEM.RegisterCallback('bw-stables:gethorses', function(source, cb)
     local src = source
     local Player = RedEM.GetPlayer(source)
     local cid = Player.citizenid
-    print(cid)
-    exports.oxmysql:fetch('SELECT * FROM horses WHERE owner_cid = ?', {cid}, function(result)
+    local loc = lib.callback.await('bw-stables:getuserloc', src)
+    exports.oxmysql:fetch('SELECT * FROM horses WHERE `owner_cid`=? AND `location`=?;', {cid, loc}, function(result)
         print(dump(result))
         cb(result)
     end)

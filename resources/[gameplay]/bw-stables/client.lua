@@ -1,4 +1,5 @@
 local RedEM = exports["redem_roleplay"]:RedEM()
+local hashorses = false
 local zones = { [1654810713] = "AguasdulcesFarm", [201158410] = "AguasdulcesRuins", [-1207133769]= "AguasdulcesVilla", [7359335]= "Annesburg", [-744494798]= "Armadillo", [-1708386982]= "BeechersHope", [1053078005]= "Blackwater", [1778899666]= "Braithwaite", [-1947415645]= "Butcher", [1862420670]= "Caliga", [-1851305682]= "cornwall", [-473051294
 ]= "Emerald", [406627834]= "lagras", [1299204683]= "Manicato", [1463094051]= "Manzanita", [2046780049]= "Rhodes", [2147354003]= "Siska", [-765540529
 ]= "StDenis", [427683330]= "Strawberry", [-1524959147]= "Tumbleweed", [459833523]= "Valentine", [2126321341]= "VANHORN", [-872622034
@@ -8,7 +9,6 @@ local zones = { [1654810713] = "AguasdulcesFarm", [201158410] = "AguasdulcesRuin
 
 RegisterNetEvent('bw-stables:OpenMenu')
 AddEventHandler('bw-stables:OpenMenu', function()
-    local ply = PlayerPedId()
     local coords = GetEntityCoords(PlayerPedId())
     local loc = zones[Citizen.InvokeNative(0x43AD8FC02B429D33, coords, 1)]
     lib.registerContext({
@@ -46,6 +46,7 @@ AddEventHandler('bw-stables:storeHorse', function()
         local id = GetMount(ply)
         local loc = zones[Citizen.InvokeNative(0x43AD8FC02B429D33, coords, 1)]
         TriggerServerEvent("bw-stables:storeHorse", model, id, loc)
+        DeleteEntity(id)
     else
         TriggerEvent("notifications:notify", "Rancher", "You have to be on the horse!", 3000)
     end
@@ -63,9 +64,9 @@ AddEventHandler('bw-stables:OpenGarage', function()
                 description = 'Get your horse',
                 icon = 'horse',
                 event = 'bw-stables:getHorse',
-                arrow = true,
                 args = {
-                    horse = v
+                    horse = v.model,
+                    oldid = v.id
                 }
             }
             table.insert(options, option)
@@ -80,6 +81,24 @@ AddEventHandler('bw-stables:OpenGarage', function()
     end)
 end)
 
+RegisterNetEvent('bw-stables:getHorse')
+AddEventHandler('bw-stables:getHorse', function(model)
+    local ply = PlayerPedId()
+    local coords = GetEntityCoords(PlayerPedId())
+    local loc = zones[Citizen.InvokeNative(0x43AD8FC02B429D33, coords, 1)]
+    local pos = Config.SpawnPoint[loc]
+    if hashorses == false then
+        local horse = CreatePed(model.horse, pos.x, pos.y, pos.z, pos.h, true, true, false, false)
+        Citizen.InvokeNative(0x283978A15512B2FE, horse, true)
+
+        TriggerEvent("notifications:notify", "Rancher", "Your horse is waiting out side!", 3000)
+        hashorses = true
+        TriggerServerEvent("bw-stables:updateid", model.oldid, horse)
+    else
+        TriggerEvent("notifications:notify", "Rancher", "You already have a horse!", 3000)
+    end
+end)
+
 -- Client Callbacks --
 lib.callback.register('bw-stables:createname', function()
     local input = lib.inputDialog('Name The Horse', {'Enter Horses Name'})
@@ -88,6 +107,13 @@ lib.callback.register('bw-stables:createname', function()
     return input
 end)
 
+lib.callback.register('bw-stables:getuserloc', function()
+    local coords = GetEntityCoords(PlayerPedId())
+    return zones[Citizen.InvokeNative(0x43AD8FC02B429D33, coords, 1)]
+end)
+
+
+-- Client Functions --
 function dump(o)
     if type(o) == 'table' then
         local s = '{ '
