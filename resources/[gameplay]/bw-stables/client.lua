@@ -47,6 +47,7 @@ AddEventHandler('bw-stables:storeHorse', function()
         local loc = zones[Citizen.InvokeNative(0x43AD8FC02B429D33, coords, 1)]
         TriggerServerEvent("bw-stables:storeHorse", model, id, loc)
         DeleteEntity(id)
+        hashorses = false
     else
         TriggerEvent("notifications:notify", "Rancher", "You have to be on the horse!", 3000)
     end
@@ -66,7 +67,7 @@ AddEventHandler('bw-stables:OpenGarage', function()
                 event = 'bw-stables:getHorse',
                 args = {
                     horse = v.model,
-                    oldid = v.id
+                    oldid = v.last_id
                 }
             }
             table.insert(options, option)
