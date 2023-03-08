@@ -29,13 +29,13 @@ Config.models = {
             anim = "idle_a",
             targets = {
                 {
-                    event = "bw-stables:OpenMenu",
-                    label = "Open Stables"
+                    event = "bw-stables:OpenGarage",
+                    label = "Open Your Stables"
                 },
                 {
                     event = "bw-stables:storeHorse",
                     label = "Store The Horse"
-                }
+                },
             }
         },
 
