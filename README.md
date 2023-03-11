@@ -22,7 +22,3 @@ if you want to use kd_mouseselection you need to buy from [here](https://store.k
 
 ### Github Project Board to see ToDo list for the project
 [Github Board](https://github.com/users/jekabso21/projects/3/views/1)
-
-
-### Discord Support Server
-[Discord Server](https://discord.gg/JF3KXK4sg4)
